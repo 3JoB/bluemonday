@@ -31,10 +31,11 @@ package bluemonday_test
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/grafana/regexp"
+
+	"github.com/3JoB/bluemonday"
 )
 
 func Example() {
@@ -50,7 +51,7 @@ func Example() {
 	// Attributes can either be added to all elements
 	p.AllowAttrs("dir").Globally()
 
-	//Or attributes can be added to specific elements
+	// Or attributes can be added to specific elements
 	p.AllowAttrs("value").OnElements("li")
 
 	// It is ALWAYS recommended that an attribute be made to match a pattern
@@ -142,7 +143,7 @@ func ExampleNewPolicy() {
 	fmt.Println(html)
 
 	// Output:
-	//<p><a href="http://www.google.com" rel="nofollow">Google</a></p>
+	// <p><a href="http://www.google.com" rel="nofollow">Google</a></p>
 }
 
 func ExampleStrictPolicy() {
@@ -157,7 +158,7 @@ func ExampleStrictPolicy() {
 	fmt.Println(html)
 
 	// Output:
-	//Goodbye Cruel World
+	// Goodbye Cruel World
 }
 
 func ExampleUGCPolicy() {
@@ -171,7 +172,7 @@ func ExampleUGCPolicy() {
 	fmt.Println(html)
 
 	// Output:
-	//<a href="http://www.google.com" rel="nofollow">Google</a>
+	// <a href="http://www.google.com" rel="nofollow">Google</a>
 }
 
 func ExamplePolicy_AllowAttrs() {
@@ -223,11 +224,11 @@ func ExamplePolicy_AllowStyles() {
 	fmt.Println(html)
 
 	// Output:
-	//<p style="color: #f00">
+	// <p style="color: #f00">
 	//	<span style="text-decoration: underline">
 	//		Red underlined <strong>text</strong>
 	//	</span>
-	//</p>
+	// </p>
 }
 
 func ExamplePolicy_AllowElements() {
@@ -247,7 +248,7 @@ func ExamplePolicy_Sanitize() {
 	fmt.Println(html)
 
 	// Output:
-	//<a href="http://www.google.com" rel="nofollow">Google</a>
+	// <a href="http://www.google.com" rel="nofollow">Google</a>
 }
 
 func ExamplePolicy_SanitizeBytes() {
@@ -261,7 +262,7 @@ func ExamplePolicy_SanitizeBytes() {
 	fmt.Println(string(b))
 
 	// Output:
-	//<a href="http://www.google.com" rel="nofollow">Google</a>
+	// <a href="http://www.google.com" rel="nofollow">Google</a>
 }
 
 func ExamplePolicy_SanitizeReader() {
@@ -275,5 +276,5 @@ func ExamplePolicy_SanitizeReader() {
 	fmt.Println(buf.String())
 
 	// Output:
-	//<a href="http://www.google.com" rel="nofollow">Google</a>
+	// <a href="http://www.google.com" rel="nofollow">Google</a>
 }

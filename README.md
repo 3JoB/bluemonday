@@ -85,7 +85,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/3JoB/bluemonday"
 )
 
 func main() {
@@ -120,7 +120,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/3JoB/bluemonday"
 )
 
 func main() {

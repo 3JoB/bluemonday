@@ -34,13 +34,12 @@ import (
 	"fmt"
 	"io"
 	"net/url"
-	"regexp"
 	"strconv"
 	"strings"
 
-	"golang.org/x/net/html"
-
 	"github.com/aymerick/douceur/parser"
+	"github.com/grafana/regexp"
+	"golang.org/x/net/html"
 )
 
 var (
@@ -245,7 +244,7 @@ func (p *Policy) sanitize(r io.Reader, w io.Writer) error {
 
 	buff, ok := w.(stringWriterWriter)
 	if !ok {
-		buff = &asStringWriter{w}
+		buff = &asStringWriter{Writer: w}
 	}
 
 	var (
@@ -496,7 +495,6 @@ func (p *Policy) sanitizeAttrs(
 	attrs []html.Attribute,
 	aps map[string][]attrPolicy,
 ) []html.Attribute {
-
 	if len(attrs) == 0 {
 		return attrs
 	}
@@ -631,7 +629,6 @@ attrsLoop:
 			p.requireNoReferrerFullyQualifiedLinks ||
 			p.addTargetBlankToFullyQualifiedLinks) &&
 			len(cleanAttrs) > 0 {
-
 			// Add rel="nofollow" if a "href" exists
 			switch elementName {
 			case "a", "area", "base", "link":
@@ -671,10 +668,8 @@ attrsLoop:
 
 					tmpAttrs := []html.Attribute{}
 					for _, htmlAttr := range cleanAttrs {
-
 						var appended bool
 						if htmlAttr.Key == "rel" && (addNoFollow || addNoReferrer) {
-
 							if addNoFollow && !strings.Contains(htmlAttr.Val, "nofollow") {
 								htmlAttr.Val += " nofollow"
 							}
@@ -777,7 +772,6 @@ attrsLoop:
 							rel.Val = "noopener"
 							cleanAttrs = append(cleanAttrs, rel)
 						}
-
 					}
 				}
 			default:
@@ -851,7 +845,7 @@ func (p *Policy) sanitizeStyles(attr html.Attribute, elementName string) html.At
 		}
 	}
 
-	//Add semi-colon to end to fix parsing issue
+	// Add semi-colon to end to fix parsing issue
 	if len(attr.Val) > 0 && attr.Val[len(attr.Val)-1] != ';' {
 		attr.Val = attr.Val + ";"
 	}
@@ -948,16 +942,14 @@ func (p *Policy) validURL(rawurl string) (string, bool) {
 			// Remove \r and \n from base64 encoded data to pass url.Parse.
 			matched := dataURIbase64Prefix.FindString(rawurl)
 			if matched != "" {
-				rawurl = matched + strings.Replace(
-					strings.Replace(
+				rawurl = matched + strings.ReplaceAll(
+					strings.ReplaceAll(
 						rawurl[len(matched):],
 						"\r",
 						"",
-						-1,
 					),
 					"\n",
 					"",
-					-1,
 				)
 			}
 		}
@@ -969,7 +961,6 @@ func (p *Policy) validURL(rawurl string) (string, bool) {
 		}
 
 		if u.Scheme != "" {
-
 			urlPolicies, ok := p.allowURLSchemes[u.Scheme]
 			if !ok {
 				return "", false
@@ -980,7 +971,7 @@ func (p *Policy) validURL(rawurl string) (string, bool) {
 			}
 
 			for _, urlPolicy := range urlPolicies {
-				if urlPolicy(u) == true {
+				if urlPolicy(u) {
 					return u.String(), true
 				}
 			}
@@ -1049,7 +1040,6 @@ func removeUnicode(value string) string {
 	substitutedValue := value
 	currentLoc := cssUnicodeChar.FindStringIndex(substitutedValue)
 	for currentLoc != nil {
-
 		character := substitutedValue[currentLoc[0]+1 : currentLoc[1]]
 		character = strings.TrimSpace(character)
 		if len(character) < 4 {

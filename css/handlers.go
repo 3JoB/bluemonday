@@ -30,8 +30,9 @@
 package css
 
 import (
-	"regexp"
 	"strings"
+
+	"github.com/grafana/regexp"
 )
 
 var (
@@ -373,7 +374,6 @@ func splitValues(value string) []string {
 }
 
 func GetDefaultHandler(attr string) func(string) bool {
-
 	if defaultStyleHandlers[attr] != nil {
 		return defaultStyleHandlers[attr]
 	}

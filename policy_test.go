@@ -30,8 +30,9 @@
 package bluemonday
 
 import (
-	"regexp"
 	"testing"
+
+	"github.com/grafana/regexp"
 )
 
 func TestAllowElementsContent(t *testing.T) {

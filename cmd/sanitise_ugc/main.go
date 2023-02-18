@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/3JoB/bluemonday"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 
 	// Read input from stdin so that this is a nice unix utility and can receive
 	// piped input
-	dirty, err := ioutil.ReadAll(os.Stdin)
+	dirty, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		log.Fatal(err)
 	}

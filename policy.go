@@ -29,14 +29,15 @@
 
 package bluemonday
 
-//TODO sgutzwiller create map of styles to default handlers
-//TODO sgutzwiller create handlers for various attributes
+// TODO sgutzwiller create map of styles to default handlers
+// TODO sgutzwiller create handlers for various attributes
+
 import (
 	"net/url"
-	"regexp"
 	"strings"
 
-	"github.com/microcosm-cc/bluemonday/css"
+	"github.com/grafana/regexp"
+	"github.com/3JoB/bluemonday/css"
 )
 
 // Policy encapsulates the allowlist of HTML elements and attributes that will
@@ -45,7 +46,6 @@ import (
 // You should use bluemonday.NewPolicy() to create a blank policy as the
 // unexported fields contain maps that need to be initialized.
 type Policy struct {
-
 	// Declares whether the maps have been initialized, used as a cheap check to
 	// ensure that those using Policy{} directly won't cause nil pointer
 	// exceptions
@@ -153,7 +153,6 @@ type Policy struct {
 }
 
 type attrPolicy struct {
-
 	// optional pattern to match, when not nil the regexp needs to match
 	// otherwise the attribute is removed
 	regexp *regexp.Regexp
@@ -232,7 +231,6 @@ func (p *Policy) init() {
 // AllowAttrs() and/or AllowElements() to construct the allowlist of HTML
 // elements and attributes.
 func NewPolicy() *Policy {
-
 	p := Policy{}
 
 	p.addDefaultElementsWithoutAttrs()
@@ -248,7 +246,6 @@ func NewPolicy() *Policy {
 // The attribute policy is only added to the core policy when either Globally()
 // or OnElements(...) are called.
 func (p *Policy) AllowAttrs(attrNames ...string) *attrPolicyBuilder {
-
 	p.init()
 
 	abp := attrPolicyBuilder{
@@ -299,7 +296,6 @@ func (p *Policy) AllowComments() {
 // The attribute policy is only added to the core policy when OnElements(...)
 // are called.
 func (p *Policy) AllowNoAttrs() *attrPolicyBuilder {
-
 	p.init()
 
 	abp := attrPolicyBuilder{
@@ -314,7 +310,6 @@ func (p *Policy) AllowNoAttrs() *attrPolicyBuilder {
 // The attribute policy is only added to the core policy when OnElements(...)
 // are called.
 func (abp *attrPolicyBuilder) AllowNoAttrs() *attrPolicyBuilder {
-
 	abp.allowEmpty = true
 
 	return abp
@@ -323,7 +318,6 @@ func (abp *attrPolicyBuilder) AllowNoAttrs() *attrPolicyBuilder {
 // Matching allows a regular expression to be applied to a nascent attribute
 // policy, and returns the attribute policy.
 func (abp *attrPolicyBuilder) Matching(regex *regexp.Regexp) *attrPolicyBuilder {
-
 	abp.regexp = regex
 
 	return abp
@@ -332,12 +326,10 @@ func (abp *attrPolicyBuilder) Matching(regex *regexp.Regexp) *attrPolicyBuilder 
 // OnElements will bind an attribute policy to a given range of HTML elements
 // and return the updated policy
 func (abp *attrPolicyBuilder) OnElements(elements ...string) *Policy {
-
 	for _, element := range elements {
 		element = strings.ToLower(element)
 
 		for _, attr := range abp.attrNames {
-
 			if _, ok := abp.p.elsAndAttrs[element]; !ok {
 				abp.p.elsAndAttrs[element] = make(map[string][]attrPolicy)
 			}
@@ -389,7 +381,6 @@ func (abp *attrPolicyBuilder) OnElementsMatching(regex *regexp.Regexp) *Policy {
 // Globally will bind an attribute policy to all HTML elements and return the
 // updated policy
 func (abp *attrPolicyBuilder) Globally() *Policy {
-
 	for _, attr := range abp.attrNames {
 		if _, ok := abp.p.globalAttrs[attr]; !ok {
 			abp.p.globalAttrs[attr] = []attrPolicy{}
@@ -413,7 +404,6 @@ func (abp *attrPolicyBuilder) Globally() *Policy {
 // The style policy is only added to the core policy when either Globally()
 // or OnElements(...) are called.
 func (p *Policy) AllowStyles(propertyNames ...string) *stylePolicyBuilder {
-
 	p.init()
 
 	abp := stylePolicyBuilder{
@@ -430,7 +420,6 @@ func (p *Policy) AllowStyles(propertyNames ...string) *stylePolicyBuilder {
 // Matching allows a regular expression to be applied to a nascent style
 // policy, and returns the style policy.
 func (spb *stylePolicyBuilder) Matching(regex *regexp.Regexp) *stylePolicyBuilder {
-
 	spb.regexp = regex
 
 	return spb
@@ -439,7 +428,6 @@ func (spb *stylePolicyBuilder) Matching(regex *regexp.Regexp) *stylePolicyBuilde
 // MatchingEnum allows a list of allowed values to be applied to a nascent style
 // policy, and returns the style policy.
 func (spb *stylePolicyBuilder) MatchingEnum(enum ...string) *stylePolicyBuilder {
-
 	spb.enum = enum
 
 	return spb
@@ -448,7 +436,6 @@ func (spb *stylePolicyBuilder) MatchingEnum(enum ...string) *stylePolicyBuilder 
 // MatchingHandler allows a handler to be applied to a nascent style
 // policy, and returns the style policy.
 func (spb *stylePolicyBuilder) MatchingHandler(handler func(string) bool) *stylePolicyBuilder {
-
 	spb.handler = handler
 
 	return spb
@@ -457,12 +444,10 @@ func (spb *stylePolicyBuilder) MatchingHandler(handler func(string) bool) *style
 // OnElements will bind a style policy to a given range of HTML elements
 // and return the updated policy
 func (spb *stylePolicyBuilder) OnElements(elements ...string) *Policy {
-
 	for _, element := range elements {
 		element = strings.ToLower(element)
 
 		for _, attr := range spb.propertyNames {
-
 			if _, ok := spb.p.elsAndStyles[element]; !ok {
 				spb.p.elsAndStyles[element] = make(map[string][]stylePolicy)
 			}
@@ -487,9 +472,7 @@ func (spb *stylePolicyBuilder) OnElements(elements ...string) *Policy {
 // OnElementsMatching will bind a style policy to any HTML elements matching the pattern
 // and return the updated policy
 func (spb *stylePolicyBuilder) OnElementsMatching(regex *regexp.Regexp) *Policy {
-
 	for _, attr := range spb.propertyNames {
-
 		if _, ok := spb.p.elsMatchingAndStyles[regex]; !ok {
 			spb.p.elsMatchingAndStyles[regex] = make(map[string][]stylePolicy)
 		}
@@ -513,7 +496,6 @@ func (spb *stylePolicyBuilder) OnElementsMatching(regex *regexp.Regexp) *Policy 
 // Globally will bind a style policy to all HTML elements and return the
 // updated policy
 func (spb *stylePolicyBuilder) Globally() *Policy {
-
 	for _, attr := range spb.propertyNames {
 		if _, ok := spb.p.globalStyles[attr]; !ok {
 			spb.p.globalStyles[attr] = []stylePolicy{}
@@ -568,7 +550,6 @@ func (p *Policy) AllowElementsMatching(regex *regexp.Regexp) *Policy {
 //
 // Note: This requires p.RequireParseableURLs(true) and will enable it.
 func (p *Policy) RequireNoFollowOnLinks(require bool) *Policy {
-
 	p.requireNoFollow = require
 	p.requireParseableURLs = true
 
@@ -582,7 +563,6 @@ func (p *Policy) RequireNoFollowOnLinks(require bool) *Policy {
 //
 // Note: This requires p.RequireParseableURLs(true) and will enable it.
 func (p *Policy) RequireNoFollowOnFullyQualifiedLinks(require bool) *Policy {
-
 	p.requireNoFollowFullyQualifiedLinks = require
 	p.requireParseableURLs = true
 
@@ -594,7 +574,6 @@ func (p *Policy) RequireNoFollowOnFullyQualifiedLinks(require bool) *Policy {
 //
 // Note: This requires p.RequireParseableURLs(true) and will enable it.
 func (p *Policy) RequireNoReferrerOnLinks(require bool) *Policy {
-
 	p.requireNoReferrer = require
 	p.requireParseableURLs = true
 
@@ -608,7 +587,6 @@ func (p *Policy) RequireNoReferrerOnLinks(require bool) *Policy {
 //
 // Note: This requires p.RequireParseableURLs(true) and will enable it.
 func (p *Policy) RequireNoReferrerOnFullyQualifiedLinks(require bool) *Policy {
-
 	p.requireNoReferrerFullyQualifiedLinks = require
 	p.requireParseableURLs = true
 
@@ -619,7 +597,6 @@ func (p *Policy) RequireNoReferrerOnFullyQualifiedLinks(require bool) *Policy {
 // video tags having a crossorigin="anonymous" added to them if one does not
 // already exist
 func (p *Policy) RequireCrossOriginAnonymous(require bool) *Policy {
-
 	p.requireCrossOriginAnonymous = require
 
 	return p
@@ -631,7 +608,6 @@ func (p *Policy) RequireCrossOriginAnonymous(require bool) *Policy {
 //
 // Note: This requires p.RequireParseableURLs(true) and will enable it.
 func (p *Policy) AddTargetBlankToFullyQualifiedLinks(require bool) *Policy {
-
 	p.addTargetBlankToFullyQualifiedLinks = require
 	p.requireParseableURLs = true
 
@@ -648,7 +624,6 @@ func (p *Policy) AddTargetBlankToFullyQualifiedLinks(require bool) *Policy {
 // - link.href
 // - script.src
 func (p *Policy) RequireParseableURLs(require bool) *Policy {
-
 	p.requireParseableURLs = require
 
 	return p
@@ -658,7 +633,6 @@ func (p *Policy) RequireParseableURLs(require bool) *Policy {
 // are parseable, have no schema information and url.IsAbs() returns false
 // This permits local URLs
 func (p *Policy) AllowRelativeURLs(require bool) *Policy {
-
 	p.RequireParseableURLs(true)
 	p.allowRelativeURLs = require
 
@@ -690,7 +664,6 @@ func (p *Policy) AllowURLSchemeWithCustomPolicy(
 	scheme string,
 	urlPolicy func(url *url.URL) (allowUrl bool),
 ) *Policy {
-
 	p.init()
 
 	p.RequireParseableURLs(true)
@@ -765,7 +738,6 @@ func (p *Policy) RequireSandboxOnIFrame(vals ...SandboxValue) {
 // " Hello  World " by setting AddSpaceWhenStrippingTag to true as this would
 // retain the intent of the text.
 func (p *Policy) AddSpaceWhenStrippingTag(allow bool) *Policy {
-
 	p.addSpaces = allow
 
 	return p
@@ -774,7 +746,6 @@ func (p *Policy) AddSpaceWhenStrippingTag(allow bool) *Policy {
 // SkipElementsContent adds the HTML elements whose tags is needed to be removed
 // with its content.
 func (p *Policy) SkipElementsContent(names ...string) *Policy {
-
 	p.init()
 
 	for _, element := range names {
@@ -791,7 +762,6 @@ func (p *Policy) SkipElementsContent(names ...string) *Policy {
 // AllowElementsContent marks the HTML elements whose content should be
 // retained after removing the tag.
 func (p *Policy) AllowElementsContent(names ...string) *Policy {
-
 	p.init()
 
 	for _, element := range names {
@@ -915,7 +885,6 @@ func (p *Policy) addDefaultElementsWithoutAttrs() {
 	p.setOfElementsAllowedWithoutAttrs["var"] = struct{}{}
 	p.setOfElementsAllowedWithoutAttrs["video"] = struct{}{}
 	p.setOfElementsAllowedWithoutAttrs["wbr"] = struct{}{}
-
 }
 
 // addDefaultSkipElementContent adds the HTML elements that we should skip
