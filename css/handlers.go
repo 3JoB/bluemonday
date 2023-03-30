@@ -32,6 +32,7 @@ package css
 import (
 	"strings"
 
+	"github.com/3JoB/unsafeConvert"
 	"github.com/grafana/regexp"
 )
 
@@ -1004,7 +1005,7 @@ func FilterHandler(value string) bool {
 	if DropShadow.MatchString(value) {
 		return true
 	}
-	colorValue := strings.TrimSuffix(string(DropShadow.ReplaceAll([]byte(value), []byte{})), ")")
+	colorValue := strings.TrimSuffix(unsafeConvert.StringReflect(DropShadow.ReplaceAll(unsafeConvert.BytesReflect(value), []byte{})), ")")
 	if ColorHandler(colorValue) {
 		return true
 	}
@@ -1824,7 +1825,7 @@ func TransformHandler(value string) bool {
 	if Matrix3D.MatchString(value) {
 		return true
 	}
-	subValue := string(TranslateScale.ReplaceAll([]byte(value), []byte{}))
+	subValue := unsafeConvert.StringReflect(TranslateScale.ReplaceAll(unsafeConvert.BytesReflect(value), []byte{}))
 	trimValue := strings.Split(strings.TrimSuffix(subValue, ")"), ",")
 	valid := true
 	for _, i := range trimValue {
@@ -1842,7 +1843,7 @@ func TransformHandler(value string) bool {
 	if Rotate3D.MatchString(value) {
 		return true
 	}
-	subValue = string(Skew.ReplaceAll([]byte(value), []byte{}))
+	subValue = unsafeConvert.StringReflect(Skew.ReplaceAll(unsafeConvert.BytesReflect(value), []byte{}))
 	subValue = strings.TrimSuffix(subValue, ")")
 	trimValue = strings.Split(subValue, ",")
 	valid = true
@@ -1855,7 +1856,7 @@ func TransformHandler(value string) bool {
 	if valid {
 		return true
 	}
-	subValue = string(Perspective.ReplaceAll([]byte(value), []byte{}))
+	subValue = unsafeConvert.StringReflect(Perspective.ReplaceAll(unsafeConvert.BytesReflect(value), []byte{}))
 	subValue = strings.TrimSuffix(subValue, ")")
 	return LengthHandler(subValue)
 }

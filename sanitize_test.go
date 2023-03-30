@@ -37,6 +37,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/3JoB/unsafeConvert"
 	"github.com/grafana/regexp"
 )
 
@@ -65,7 +66,7 @@ func TestSignatureBehaviour(t *testing.T) {
 		t.Errorf(`Sanitize() input = %s, output = %s`, input, output)
 	}
 
-	if output := string(p.SanitizeBytes([]byte(input))); output != input {
+	if output := unsafeConvert.StringReflect(p.SanitizeBytes(unsafeConvert.BytesReflect(input))); output != input {
 		t.Errorf(`SanitizeBytes() input = %s, output = %s`, input, output)
 	}
 
@@ -81,7 +82,7 @@ func TestSignatureBehaviour(t *testing.T) {
 		t.Errorf(`Sanitize() input = %s, output = %s`, input, output)
 	}
 
-	if output := string(p.SanitizeBytes([]byte(input))); output != input {
+	if output := unsafeConvert.StringReflect(p.SanitizeBytes(unsafeConvert.BytesReflect(input))); output != input {
 		t.Errorf(`SanitizeBytes() input = %s, output = %s`, input, output)
 	}
 
@@ -440,10 +441,7 @@ func TestGlobalURLPatternsViaCustomPolicy(t *testing.T) {
 		"https",
 		func(url *url.URL) bool {
 			// Allow YouTube
-			if url.Host == `www.youtube.com` {
-				return true
-			}
-			return false
+			return url.Host == `www.youtube.com`
 		},
 	)
 
@@ -3742,7 +3740,7 @@ func TestIssue134(t *testing.T) {
 	})
 
 	t.Run("SanitizeBytes", func(t *testing.T) {
-		out := string(p.SanitizeBytes([]byte(in)))
+		out := unsafeConvert.StringReflect(p.SanitizeBytes(unsafeConvert.BytesReflect(in)))
 		if out != expected {
 			t.Errorf(
 				"test failed;\ninput   : %s\noutput  : %s\nexpected: %s",

@@ -37,6 +37,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/3JoB/unsafeConvert"
 	"github.com/aymerick/douceur/parser"
 	"github.com/grafana/regexp"
 	"golang.org/x/net/html"
@@ -230,7 +231,7 @@ type asStringWriter struct {
 }
 
 func (a *asStringWriter) WriteString(s string) (int, error) {
-	return a.Write([]byte(s))
+	return a.Write(unsafeConvert.BytesReflect(s))
 }
 
 func (p *Policy) sanitize(r io.Reader, w io.Writer) error {

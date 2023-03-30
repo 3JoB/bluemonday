@@ -33,6 +33,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/3JoB/unsafeConvert"
 	"github.com/grafana/regexp"
 
 	"github.com/3JoB/bluemonday"
@@ -256,10 +257,10 @@ func ExamplePolicy_SanitizeBytes() {
 	p := bluemonday.UGCPolicy()
 
 	// []byte in, []byte out
-	b := []byte(`<a onblur="alert(secret)" href="http://www.google.com">Google</a>`)
+	b := unsafeConvert.BytesReflect(`<a onblur="alert(secret)" href="http://www.google.com">Google</a>`)
 	b = p.SanitizeBytes(b)
 
-	fmt.Println(string(b))
+	fmt.Println(unsafeConvert.StringReflect(b))
 
 	// Output:
 	// <a href="http://www.google.com" rel="nofollow">Google</a>

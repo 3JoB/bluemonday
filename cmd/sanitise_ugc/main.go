@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/3JoB/unsafeConvert"
+
 	"github.com/3JoB/bluemonday"
 )
 
@@ -31,7 +33,7 @@ func main() {
 	fmt.Fprint(
 		os.Stdout,
 		p.Sanitize(
-			string(dirty),
+			unsafeConvert.StringReflect(dirty),
 		),
 	)
 }

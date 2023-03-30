@@ -37,6 +37,7 @@ import (
 	"strings"
 
 	"github.com/grafana/regexp"
+
 	"github.com/3JoB/bluemonday/css"
 )
 
