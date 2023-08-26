@@ -1,6 +1,6 @@
 module github.com/3JoB/bluemonday
 
-go 1.20
+go 1.21.0
 
 require (
 	github.com/3JoB/unsafeConvert v1.3.0
