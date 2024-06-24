@@ -30,7 +30,7 @@
 package bluemonday
 
 import (
-	"regexp"
+	"github.com/grafana/regexp"
 )
 
 // StrictPolicy returns an empty policy, which will effectively strip all HTML
@@ -52,35 +52,34 @@ func StripTagsPolicy() *Policy {
 // providing a policy to sanitise HTML5 documents safely but with the
 // least intrusion on the formatting expectations of the user.
 func UGCPolicy() *Policy {
-
 	p := NewPolicy()
 
-	///////////////////////
+	// /////////////////////
 	// Global attributes //
-	///////////////////////
+	// /////////////////////
 
 	// "class" is not permitted as we are not allowing users to style their own
 	// content
 
 	p.AllowStandardAttributes()
 
-	//////////////////////////////
+	// ////////////////////////////
 	// Global URL format policy //
-	//////////////////////////////
+	// ////////////////////////////
 
 	p.AllowStandardURLs()
 
-	////////////////////////////////
+	// //////////////////////////////
 	// Declarations and structure //
-	////////////////////////////////
+	// //////////////////////////////
 
 	// "xml" "xslt" "DOCTYPE" "html" "head" are not permitted as we are
 	// expecting user generated content to be a fragment of HTML and not a full
 	// document.
 
-	//////////////////////////
+	// ////////////////////////
 	// Sectioning root tags //
-	//////////////////////////
+	// ////////////////////////
 
 	// "article" and "aside" are permitted and takes no attributes
 	p.AllowElements("article", "aside")
@@ -108,9 +107,9 @@ func UGCPolicy() *Policy {
 	// "summary" is permitted and takes no attributes
 	p.AllowElements("summary")
 
-	//////////////////////////
+	// ////////////////////////
 	// Headings and footers //
-	//////////////////////////
+	// ////////////////////////
 
 	// "footer" is not permitted as we expect user content to be a fragment and
 	// not structural to this extent
@@ -124,9 +123,9 @@ func UGCPolicy() *Policy {
 	// "hgroup" is permitted and takes no attributes
 	p.AllowElements("hgroup")
 
-	/////////////////////////////////////
+	// ///////////////////////////////////
 	// Content grouping and separating //
-	/////////////////////////////////////
+	// ///////////////////////////////////
 
 	// "blockquote" is permitted, including the "cite" attribute which must be
 	// a standard URL.
@@ -135,9 +134,9 @@ func UGCPolicy() *Policy {
 	// "br" "div" "hr" "p" "span" "wbr" are permitted and take no attributes
 	p.AllowElements("br", "div", "hr", "p", "span", "wbr")
 
-	///////////
+	// /////////
 	// Links //
-	///////////
+	// /////////
 
 	// "a" is permitted
 	p.AllowAttrs("href").OnElements("a")
@@ -161,9 +160,9 @@ func UGCPolicy() *Policy {
 
 	// "link" is not permitted
 
-	/////////////////////
+	// ///////////////////
 	// Phrase elements //
-	/////////////////////
+	// ///////////////////
 
 	// The following are all inline phrasing elements
 	p.AllowElements("abbr", "acronym", "cite", "code", "dfn", "em",
@@ -175,9 +174,9 @@ func UGCPolicy() *Policy {
 	// "time" is permitted
 	p.AllowAttrs("datetime").Matching(ISO8601).OnElements("time")
 
-	////////////////////
+	// //////////////////
 	// Style elements //
-	////////////////////
+	// //////////////////
 
 	// block and inline elements that impart no semantic meaning but style the
 	// document
@@ -186,9 +185,9 @@ func UGCPolicy() *Policy {
 	// "style" is not permitted as we are not yet sanitising CSS and it is an
 	// XSS attack vector
 
-	//////////////////////
+	// ////////////////////
 	// HTML5 Formatting //
-	//////////////////////
+	// ////////////////////
 
 	// "bdi" "bdo" are permitted
 	p.AllowAttrs("dir").Matching(Direction).OnElements("bdi", "bdo")
@@ -196,29 +195,29 @@ func UGCPolicy() *Policy {
 	// "rp" "rt" "ruby" are permitted
 	p.AllowElements("rp", "rt", "ruby")
 
-	///////////////////////////
+	// /////////////////////////
 	// HTML5 Change tracking //
-	///////////////////////////
+	// /////////////////////////
 
 	// "del" "ins" are permitted
 	p.AllowAttrs("cite").Matching(Paragraph).OnElements("del", "ins")
 	p.AllowAttrs("datetime").Matching(ISO8601).OnElements("del", "ins")
 
-	///////////
+	// /////////
 	// Lists //
-	///////////
+	// /////////
 
 	p.AllowLists()
 
-	////////////
+	// //////////
 	// Tables //
-	////////////
+	// //////////
 
 	p.AllowTables()
 
-	///////////
+	// /////////
 	// Forms //
-	///////////
+	// /////////
 
 	// By and large, forms are not permitted. However there are some form
 	// elements that can be used to present data, and we do permit those
@@ -239,9 +238,9 @@ func UGCPolicy() *Policy {
 	// "progress" is permitted
 	p.AllowAttrs("value", "max").Matching(Number).OnElements("progress")
 
-	//////////////////////
+	// ////////////////////
 	// Embedded content //
-	//////////////////////
+	// ////////////////////
 
 	// Vast majority not permitted
 	// "audio" "canvas" "embed" "iframe" "object" "param" "source" "svg" "track"

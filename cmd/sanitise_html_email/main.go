@@ -5,9 +5,10 @@ import (
 	"io"
 	"log"
 	"os"
-	"regexp"
 
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/grafana/regexp"
+
+	"github.com/3JoB/bluemonday"
 )
 
 var (

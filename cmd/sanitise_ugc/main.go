@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/3JoB/bluemonday"
 )
 
 func main() {

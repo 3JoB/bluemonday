@@ -28,7 +28,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //go:build go1.8
-// +build go1.8
 
 package bluemonday
 
@@ -38,7 +37,6 @@ import (
 )
 
 func TestXSSGo18(t *testing.T) {
-
 	p := UGCPolicy()
 
 	tests := []test{
